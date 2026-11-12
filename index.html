@@ -49,7 +49,8 @@ details li,details p{color:var(--mut);font-size:15px;margin:4px 0}
 .tab{padding:9px 18px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--mut);cursor:pointer;font:600 14px inherit;transition:.25s}
 .tab.on{background:linear-gradient(100deg,var(--a),var(--b));color:#041018;border:0}
 #v3{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:18px}
-@media(max-width:860px){#v3{grid-template-columns:1fr}}
+@media(max-width:860px){#v3{grid-template-columns:minmax(0,1fr)}}
+#v3>*,.side,.side>*{min-width:0;max-width:100%}html,body{overflow-x:hidden;max-width:100%}
 #cv{position:relative;height:min(70vh,560px);min-height:360px;border-radius:20px;border:1px solid var(--bd);overflow:hidden;background:radial-gradient(circle at 50% 40%,#16203d,#090d18)}
 #cv canvas{display:block;width:100%;height:100%;touch-action:none}
 #ld{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);transition:opacity .6s}
