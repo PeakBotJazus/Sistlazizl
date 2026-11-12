@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Лазерный канал связи на ESP32-S3 — корпуса, 3D и чертежи</title>
+<meta name="description" content="Передатчик с лазером и приёмник с фотодиодом на ESP32-S3: корпуса для 3D-печати, интерактивная 3D-модель, чертежи.">
+<style>
+:root{--bg:#070b14;--card:rgba(255,255,255,.05);--bd:rgba(255,255,255,.1);--fg:#e8ecf6;--mut:#8f9ab3;--a:#37e6ff;--b:#8b5cff;--r:#ff4d6d;--g:#3ddc97;--y:#ffc857}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(900px 500px at 15% -5%,#1b2a6b66,transparent),radial-gradient(800px 500px at 90% 10%,#6b1b5a55,transparent),radial-gradient(700px 600px at 50% 110%,#0b4a5a55,transparent)}
+a{color:var(--a);text-decoration:none}h1,h2,h3{line-height:1.15;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(14px);background:#070b14aa;border-bottom:1px solid var(--bd)}
+nav .wrap{display:flex;align-items:center;gap:18px;height:56px;overflow-x:auto;white-space:nowrap}
+nav b{margin-right:auto;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;color:transparent}
+nav a{color:var(--mut);font-size:14px}nav a:hover{color:#fff}
+#bar{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 0 60px;position:relative}
+.hero h1{font-size:clamp(34px,7vw,76px);font-weight:800;letter-spacing:-.02em;margin:14px 0}
+.grad{background:linear-gradient(100deg,var(--a),var(--b),var(--r),var(--a));background-size:300% 100%;-webkit-background-clip:text;color:transparent;animation:flow 8s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.tag{display:inline-block;padding:5px 12px;border:1px solid var(--bd);border-radius:99px;color:var(--mut);font-size:13px;background:var(--card)}
+.hero p{max-width:640px;color:var(--mut);font-size:18px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{padding:13px 22px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--fg);font:600 15px inherit;cursor:pointer;transition:.25s}
+.btn:hover{transform:translateY(-3px);border-color:var(--a);box-shadow:0 8px 30px #37e6ff33}
+.btn.p{background:linear-gradient(100deg,var(--a),var(--b));color:#041018;border:0}
+.hero .wrap{position:relative;z-index:1}.beam{position:absolute;left:0;right:0;top:62%;height:2px;background:linear-gradient(90deg,transparent,var(--r),transparent);filter:drop-shadow(0 0 8px var(--r));animation:sweep 5s ease-in-out infinite;opacity:.8}
+@keyframes sweep{0%,100%{transform:translateX(-30%) scaleX(.4);opacity:0}50%{transform:translateX(0) scaleX(1);opacity:.9}}
+.stats{display:flex;flex-wrap:wrap;gap:30px;margin-top:44px}.stats div{min-width:110px}.stats b{font-size:34px;display:block;color:#fff}.stats span{color:var(--mut);font-size:13px}
+section{padding:90px 0}h2{font-size:clamp(28px,4.5vw,44px);margin-bottom:10px}.sub{color:var(--mut);max-width:700px;margin:0 0 36px}
+.rv{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:22px;transition:.3s;backdrop-filter:blur(6px)}
+.card:hover{transform:translateY(-5px);border-color:#37e6ff66;box-shadow:0 14px 40px #0006}
+.card h3{font-size:20px;margin-bottom:6px}.card p,.card li{color:var(--mut);font-size:15px}.card ul{padding-left:18px;margin:8px 0 0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;box-shadow:0 0 10px currentColor}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 30px}
+.node{padding:14px 20px;border-radius:14px;border:1px solid var(--bd);background:var(--card);text-align:center;min-width:130px}
+.node small{display:block;color:var(--mut)}
+.ray{height:3px;width:90px;background:repeating-linear-gradient(90deg,var(--r) 0 10px,transparent 10px 20px);animation:dash 1s linear infinite;filter:drop-shadow(0 0 6px var(--r));border-radius:3px}
+.arr{height:3px;width:50px;background:repeating-linear-gradient(90deg,var(--a) 0 8px,transparent 8px 14px);animation:dash 1.4s linear infinite}
+@keyframes dash{to{background-position:20px 0}}
+details{background:var(--card);border:1px solid var(--bd);border-radius:14px;margin:10px 0;padding:4px 18px;transition:.3s}
+details[open]{border-color:#8b5cff66}summary{cursor:pointer;padding:12px 0;font-weight:600}
+details li,details p{color:var(--mut);font-size:15px;margin:4px 0}
+.two{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:9px 18px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--mut);cursor:pointer;font:600 14px inherit;transition:.25s}
+.tab.on{background:linear-gradient(100deg,var(--a),var(--b));color:#041018;border:0}
+#v3{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:18px}
+@media(max-width:860px){#v3{grid-template-columns:1fr}}
+#cv{position:relative;height:min(70vh,560px);min-height:360px;border-radius:20px;border:1px solid var(--bd);overflow:hidden;background:radial-gradient(circle at 50% 40%,#16203d,#090d18)}
+#cv canvas{display:block;width:100%;height:100%;touch-action:none}
+#ld{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);transition:opacity .6s}
+.side{display:flex;flex-direction:column;gap:12px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=range]{flex:1;min-width:120px;accent-color:var(--a)}
+.pl{max-height:240px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.pi{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--card);cursor:pointer;font-size:14px;transition:.2s}
+.pi:hover,.pi.on{border-color:var(--a);background:#37e6ff14}.pi input{accent-color:var(--a)}
+#info h3{font-size:19px}#info p{color:var(--mut);font-size:14.5px;margin:6px 0}#info .k{color:var(--a);font-size:13px}
+.gal{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.gal figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--bd);background:#fff;cursor:zoom-in;transition:.35s;position:relative}
+.gal figure:hover{transform:scale(1.02);box-shadow:0 20px 50px #0008}.gal img{width:100%;display:block}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;background:#070b14dd;color:#fff;font-size:13px}
+#lb{position:fixed;inset:0;background:#000d;z-index:99;display:none;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}#lb.on{display:flex;animation:fade .3s}#lb img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+@keyframes fade{from{opacity:0}}
+.dl{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--bd);border-radius:12px;background:var(--card);margin:8px 0;transition:.25s}.dl:hover{border-color:var(--a);transform:translateX(4px)}
+.dl span{color:var(--mut);font-size:13px}
+.note{border-left:3px solid var(--y);padding:10px 16px;background:#ffc85712;border-radius:0 12px 12px 0;color:#e6d9b8;font-size:15px;margin:8px 0}
+footer{padding:40px 0;color:var(--mut);text-align:center;border-top:1px solid var(--bd);font-size:14px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style></head><body>
+<nav><div class="wrap"><b>LASER·LINK</b><a href="#idea">Идея</a><a href="#devices">Устройства</a><a href="#model">3D</a><a href="#parts">Детали</a><a href="#drawings">Чертежи</a><a href="#download">Скачать</a></div><div id="bar"></div></nav>
+<header class="hero"><div class="beam"></div><div class="wrap">
+<span class="tag">ESP32-S3 · лазер KY-008 · фотодиод BPW34</span>
+<h1>Лазерный канал<br><span class="grad">связи на ESP32-S3</span></h1>
+<p>Два устройства: передатчик с лазерным модулем и приёмник с фотодиодом, усилителем и цветным экраном. Здесь всё: описания, корпуса для 3D-печати, интерактивная модель с разбором и чертежи.</p>
+<div class="btns"><a class="btn p" href="#model">Открыть 3D-модель</a><a class="btn" href="#drawings">Чертежи</a><a class="btn" href="#download">Скачать STL</a></div>
+<div class="stats"><div><b data-n="2">0</b><span>устройства</span></div><div><b data-n="5">0</b><span>печатных деталей</span></div><div><b data-n="3">0</b><span>диафрагмы в трубке</span></div><div><b data-n="4">0</b><span>листа чертежей</span></div></div>
+</div></header>
+
+<section id="idea"><div class="wrap">
+<h2 class="rv">Как это работает</h2><p class="sub rv">Телефон по Bluetooth даёт данные передатчику, тот модулирует лазер. Приёмник ловит луч фотодиодом через чёрную трубку и показывает результат на экране.</p>
+<div class="flow rv"><div class="node">Телефон<small>подключён</small></div><div class="arr"></div><div class="node"><span class="dot" style="color:var(--r);background:var(--r)"></span>Передатчик<small>ESP32-S3 + лазер</small></div><div class="ray"></div><div class="node"><span class="dot" style="color:var(--a);background:var(--a)"></span>Приёмник<small>BPW34 + MCP6002</small></div><div class="arr"></div><div class="node">Экран<small>ST7789 320×240</small></div></div>
+<div class="grid">
+<div class="card rv"><h3>Точная ось луча</h3><p>Лазер зажат в канале Ø6,2 мм длиной 16 мм и фиксируется винтом M3. Ось задана геометрией, а не вручную.</p></div>
+<div class="card rv"><h3>Свет только по оси</h3><p>Чёрная трубка с тремя диафрагмами Ø2 мм через 15 мм. Фотодиод стоит на дне тёмным квадратом наружу.</p></div>
+<div class="card rv"><h3>Без люфтов</h3><p>Трубка и лазер жёстко закреплены на крышке над платами. При толчке юстировка не сбивается.</p></div>
+<div class="card rv"><h3>Лёгкий съём</h3><p>Крышка снимается без инструментов, платы на скотче. Выемки под палец на боковых стенках.</p></div>
+</div></div></section>
+
+<section id="devices"><div class="wrap">
+<h2 class="rv">Устройства и требования</h2><p class="sub rv">Все описания из технических заданий, версия 1 и уточнения.</p>
+<div class="two">
+<div class="rv"><h3 style="margin-bottom:12px"><span class="dot" style="color:var(--r);background:var(--r)"></span>Устройство 1: передатчик</h3>
+<details open><summary>Состав</summary><ul><li>Плата ESP32-S3, 64 × 28 × 8 мм.</li><li>Лазерный модуль KY-008: плата 18,5 × 15 мм, металлический цилиндр с линзой.</li><li>3 светодиода (зелёный, жёлтый, красный) с резисторами.</li><li>Питание от USB Type-C (кабель или powerbank).</li></ul></details>
+<details><summary>Исходное ТЗ на корпус</summary><ul><li>Окно под цилиндр лазера Ø6 мм, лазер закреплён жёстко, луч строго по оси.</li><li>Три отверстия Ø5 мм в ряд на лицевой панели с подписями: зелёный (питание), жёлтый (телефон подключён), красный (идёт передача).</li><li>Два USB-разъёма платы доступны с торца или бока (прошивка и питание).</li><li>Крепление платы: стойки с винтами M2/M3 или защёлки.</li><li>Вентиляция не нужна.</li></ul></details>
+<details><summary>Уточнённое ТЗ (версия 2)</summary><ul><li>Лазер внутри корпуса строго над платой ESP32-S3; окно Ø6,2–6,3 мм, жёсткая фиксация стопорным винтом M3 или цангой.</li><li>Светодиоды: изнутри держатель (фиксатор/фаска) со светоизолирующими перегородками.</li><li>С боковой стороны два выреза под USB Type-C, расстояние между краями 5 мм.</li><li>Плата крепится к основанию на двусторонний скотч, без винтов.</li><li>Высота корпуса 25–30 мм с запасом под плату, провода и лазер.</li><li>Корпус должен легко сниматься; значки питания и отладки у разъёмов.</li></ul></details></div>
+<div class="rv"><h3 style="margin-bottom:12px"><span class="dot" style="color:var(--a);background:var(--a)"></span>Устройство 2: приёмник</h3>
+<details open><summary>Состав</summary><ul><li>ESP32-S3 на общей паячной плате 50 × 70 мм вместе с усилителем на MCP6002 (DIP8) и резисторами.</li><li>Цветной экран ST7789 320 × 240, модуль с чёрным бортом 48 × 35 мм, подключён проводами (8 пинов).</li><li>Фотодиод BPW34: корпус 5,4 × 4,3 × 3,2 мм, тёмный квадрат 2,7 × 2,7 мм.</li><li>Питание от USB Type-C.</li></ul></details>
+<details><summary>Исходное ТЗ на корпус</summary><ul><li>Экран на лицевой стороне, окно 49 × 35 мм, заподлицо или с рамкой; наклон 15–20° по желанию.</li><li>Оптический канал (самое важное): чёрная матовая трубка длиной 3–5 см, внутренний Ø8–10 мм; 2–3 диафрагмы с отверстием 2 мм через 1,5 см.</li><li>Диод на дне трубки, тёмным квадратом строго наружу; корпус рядом с диодом светонепроницаем; трубка направлена на лазер.</li><li>USB-разъём и кнопка RST доступны снаружи.</li><li>Экран, платы и трубка без люфтов.</li></ul></details>
+<details><summary>Уточнённое ТЗ (версия 2)</summary><ul><li>Окно экрана 48 × 35 мм под модуль с чёрным бортом; фиксация изнутри.</li><li>Фотодиод расположен строго над платой ESP32-S3.</li><li>Два USB Type-C на внешней панели, расстояние между краями 5 мм, высота разъёма 3 мм, длина 10 мм.</li><li>Отверстия под RST нет: корпус сплошной, при необходимости крышку просто снимают.</li><li>Платы на двустороннем скотче; внутренняя высота не менее 30–35 мм.</li><li>Достаточная жёсткость: юстировка не сбивается от случайного толчка.</li></ul></details></div>
+</div></div></section>
+
+<section id="model"><div class="wrap">
+<h2 class="rv">Интерактивная 3D-модель</h2><p class="sub rv">Вращайте, приближайте, нажимайте на детали. Кнопка «Разобрать» плавно раздвигает устройство, ползунок управляет вручную.</p>
+<div class="tabs rv" id="dtabs"><button class="tab on" data-d="tx">Передатчик</button><button class="tab" data-d="rx">Приёмник</button></div>
+<div id="v3" class="rv"><div id="cv"><div id="ld">Загрузка моделей…</div></div>
+<div class="side"><div class="ctl"><button class="btn p" id="bx">Разобрать</button><button class="btn" id="bt">Прозрачность</button><button class="btn" id="br">Вращение</button></div>
+<div class="ctl"><span style="color:var(--mut);font-size:13px">Сборка</span><input type="range" id="sl" min="0" max="1" step="0.01" value="0"><span style="color:var(--mut);font-size:13px">Разбор</span></div>
+<div class="pl" id="pl"></div>
+<div class="card" id="info"><h3>Выберите деталь</h3><p>Нажмите на деталь в 3D или в списке, чтобы узнать, что это.</p></div></div></div>
+</div></section>
+
+<section id="parts"><div class="wrap">
+<h2 class="rv">Все части устройств</h2><p class="sub rv">Что входит в каждое устройство и зачем оно нужно.</p>
+<div class="tabs rv" id="ptabs"><button class="tab on" data-f="all">Все</button><button class="tab" data-f="tx">Передатчик</button><button class="tab" data-f="rx">Приёмник</button></div>
+<div class="grid" id="pg"></div></div></section>
+
+<section id="drawings"><div class="wrap">
+<h2 class="rv">Чертежи</h2><p class="sub rv">Четыре листа с размерами в мм. Нажмите, чтобы открыть крупно. Это рабочие чертежи для сборки и проверки, не оформленные по ГОСТ.</p>
+<div class="gal">
+<figure class="rv"><img loading="lazy" src="assets/drawing-1.png" alt="Приёмник, вид сверху"><figcaption>Лист 1 · Приёмник, вид сверху</figcaption></figure>
+<figure class="rv"><img loading="lazy" src="assets/drawing-2.png" alt="Приёмник, разрез"><figcaption>Лист 2 · Приёмник, разрез</figcaption></figure>
+<figure class="rv"><img loading="lazy" src="assets/drawing-3.png" alt="Передатчик, вид сверху"><figcaption>Лист 3 · Передатчик, вид сверху</figcaption></figure>
+<figure class="rv"><img loading="lazy" src="assets/drawing-4.png" alt="Передатчик, разрез"><figcaption>Лист 4 · Передатчик, разрез</figcaption></figure></div>
+<div class="btns"><a class="btn" href="drawings.pdf" download>Скачать PDF</a></div></div></section>
+
+<section id="download"><div class="wrap">
+<h2 class="rv">Скачать и напечатать</h2><p class="sub rv">Пять STL-файлов. Каждая деталь лежит на столе так, как её нужно печатать, поворачивать ничего не надо.</p>
+<div class="two"><div class="rv">
+<a class="dl" href="stl/transmitter_body.stl" download>Передатчик — корпус <span>transmitter_body.stl</span></a>
+<a class="dl" href="stl/transmitter_lid.stl" download>Передатчик — крышка <span>transmitter_lid.stl</span></a>
+<a class="dl" href="stl/receiver_body.stl" download>Приёмник — корпус <span>receiver_body.stl</span></a>
+<a class="dl" href="stl/receiver_lid.stl" download>Приёмник — крышка <span>receiver_lid.stl</span></a>
+<a class="dl" href="stl/receiver_screen_bar.stl" download>Планка экрана <span>receiver_screen_bar.stl</span></a></div>
+<div class="rv"><div class="card"><h3>Настройки печати</h3><ul><li>Чёрный PETG или PLA, слой 0,2 мм.</li><li>4 периметра, заполнение от 30%.</li><li>Крышки с мостами 15–19 мм: включите поддержки или мосты.</li><li>Корпус рядом с фотодиодом должен быть светонепроницаем.</li></ul></div>
+<p class="note">Крышка приёмника фиксируется с зазором около 0,1 мм на сторону. Если не садится, слегка зачистите выступ, если болтается, подложите ленту.</p>
+<p class="note">Высота оси лазера (21,6 мм) рассчитана на цилиндр, лежащий на плате KY-008. Проверьте на своём модуле.</p>
+<p class="note">Окна USB 12,4 × 6,6 мм под порты 10 × 3 мм с шагом 15 мм. Значки: молния — питание, жук — отладка.</p></div></div>
+</div></section>
+<footer>Корпуса сгенерированы скриптом (папка generator в репозитории, если добавите). Размеры в мм.</footer>
+<div id="lb"><img alt=""></div>
+<script src="assets/models.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* анимации */
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});
+function obs(){$$('.rv:not(.in)').forEach(e=>io.observe(e))}obs();
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+$$('[data-n]').forEach(el=>{const n=+el.dataset.n;let i=0;const t=setInterval(()=>{el.textContent=++i;if(i>=n)clearInterval(t)},260)});
+$$('.gal img').forEach(i=>i.parentElement.onclick=()=>{$('#lb img').src=i.src;$('#lb').classList.add('on')});$('#lb').onclick=()=>$('#lb').classList.remove('on');
+/* данные деталей */
+const P=[
+{id:'tb',d:'tx',n:'Корпус передатчика',c:'#9aa6c2',f:'transmitter_body',k:0,t:'Основа устройства. Две стенки с окнами: спереди отверстие Ø9 мм под лазер, сзади два окна USB-C со значками питания и отладки. Выемки под палец на боковых стенках.',s:'81 × 76,5 × 30 мм · стенка 2,5 мм'},
+{id:'tl',d:'tx',n:'Крышка передатчика',c:'#6fd0a8',f:'transmitter_lid',zt:33,k:1,t:'Снимается без инструментов. Несёт лоток лазера над платой, канал Ø6,2 мм со стопорным винтом M3, держатели светодиодов с перегородками и выгравированные подписи.',s:'толщина 3 мм · выступ-фиксатор 3 мм'},
+{id:'te',d:'tx',n:'ESP32-S3',c:'#3b82f6',b:[28,64,8,18.5,40,9.5],k:.25,t:'Управляет лазером и светодиодами, связывается с телефоном. Лежит на подиуме на двустороннем скотче, USB-C выходит в заднюю стенку.',s:'64 × 28 × 8 мм · два USB-C'},
+{id:'tp',d:'tx',n:'Лазерный модуль KY-008',c:'#ff4d6d',b:[15,18.5,1.6,18.5,26.3,17.8],k:.6,t:'Излучатель. Плата лежит в лотке на крышке над ESP32, цилиндр с линзой входит в канал и фиксируется винтом M3.',s:'плата 18,5 × 15 мм · цилиндр Ø6 мм',g:'tc'},
+{id:'tc',d:'tx',n:'Цилиндр лазера',c:'#ffb3c0',y:[3,11,18.5,11.5,21.6],k:.6,t:'Металлический цилиндр с линзой. Ось луча задаёт длинный канал в крышке, поэтому луч выходит строго по оси.',s:'Ø6 мм · канал Ø6,2 × 16 мм',h:1},
+{id:'t1',d:'tx',n:'Светодиоды 5 мм',c:'#3ddc97',L:[-31,-13,5],k:1.05,t:'Зелёный — питание, жёлтый — телефон подключён, красный — идёт передача. Вставляются снизу в держатели с перегородками, чтобы не засвечивать друг друга.',s:'3 шт · Ø5 мм · отверстия 5,2 мм'},
+{id:'rb',d:'rx',n:'Корпус приёмника',c:'#9aa6c2',f:'receiver_body',k:0,t:'Светонепроницаемый корпус высотой 36 мм. Спереди отверстие Ø13,8 мм под трубку и два окна USB-C со значками. Площадки под скотч для платы.',s:'71 × 82,5 × 36 мм'},
+{id:'rl',d:'rx',n:'Крышка приёмника',c:'#6fb0ff',f:'receiver_lid',zt:40,k:1,t:'Несёт экран и оптическую трубку: она висит на крышке над платами. Окно 48 × 35 мм, гнездо модуля 58,4 × 37,9 мм.',s:'толщина 4 мм · трубка Ø13 × 47,5 мм'},
+{id:'rs',d:'rx',n:'Планка экрана',c:'#ffc857',f:'receiver_screen_bar',pos:[0,60,32],k:.45,t:'Прижимает модуль экрана к крышке изнутри. Крепится двумя винтами M2.',s:'56 × 7 × 4 мм'},
+{id:'rm',d:'rx',n:'Экран ST7789',c:'#111827',b:[37.9,58.4,3,0,49.5,37.5],k:.7,t:'Цветной IPS-экран 320 × 240 с чёрным бортом 48 × 35 мм. Садится в гнездо крышки, провода идут на плату.',s:'58 × 37,5 мм · 8 пинов'},
+{id:'rp',d:'rx',n:'Макетная плата 50 × 70',c:'#1f9d6b',b:[50,70,1.6,0,43,6.3],k:.12,t:'Общая паячная плата: ESP32-S3, усилитель на MCP6002 (DIP8), резисторы. Стоит на четырёх площадках на скотче.',s:'50 × 70 мм'},
+{id:'re',d:'rx',n:'ESP32-S3',c:'#3b82f6',b:[28,64,8,-10,40,13.6],k:.3,t:'Обрабатывает сигнал, рисует на экране. USB-C выходит в переднюю стенку.',s:'64 × 28 × 8 мм'},
+{id:'rd',d:'rx',n:'Фотодиод BPW34',c:'#f59e0b',b:[5.4,3.2,4.3,24,46.5,29],k:1,t:'Стоит на дне трубки тёмным квадратом 2,7 × 2,7 мм наружу, строго по центру. Над платой, провода идут вниз.',s:'5,4 × 4,3 × 3,2 мм'}];
+const DV={tx:{c:[0,38,16],cam:[130,-150,110]},rx:{c:[0,41,18],cam:[150,-170,125]}};
+/* карточки */
+function cards(f){$('#pg').innerHTML=P.filter(p=>!p.h&&(f==='all'||p.d===f)).map(p=>`<div class="card rv"><h3><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}</h3><p>${p.t}</p><ul><li>${p.s}</li><li>${p.d==='tx'?'Передатчик':'Приёмник'}</li></ul></div>`).join('');obs()}
+cards('all');$$('#ptabs .tab').forEach(b=>b.onclick=()=>{$$('#ptabs .tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');cards(b.dataset.f)});
+/* 3D */
+let R,S,C,CT,meshes=[],cur='tx',ex=0,tg=0,sel=null,trans=false,ready=false;const geo={};
+async function parse(b){const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));const buf=await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();const dv=new DataView(buf),nv=dv.getUint32(0,true),ni=dv.getUint32(4,true);let g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(buf.slice(8,8+nv*12)),3));g.setIndex(new THREE.BufferAttribute(new Uint32Array(buf.slice(8+nv*12,8+nv*12+ni*4)),1));g=g.toNonIndexed();g.computeVertexNormals();return g}
+function init(){const cv=$('#cv');S=new THREE.Scene();C=new THREE.PerspectiveCamera(38,1,1,2000);C.up.set(0,0,1);R=new THREE.WebGLRenderer({antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio,2));cv.appendChild(R.domElement);
+S.add(new THREE.HemisphereLight(0xffffff,0x445566,.95));const l=new THREE.DirectionalLight(0xffffff,.9);l.position.set(120,-200,260);S.add(l);const l2=new THREE.DirectionalLight(0x88aaff,.4);l2.position.set(-150,150,60);S.add(l2);
+CT=new THREE.OrbitControls(C,R.domElement);CT.enableDamping=true;CT.autoRotate=true;CT.autoRotateSpeed=1.2;
+const rs=()=>{const w=cv.clientWidth,h=cv.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.updateProjectionMatrix()};addEventListener('resize',rs);rs();
+const ray=new THREE.Raycaster(),m=new THREE.Vector2();let dn;R.domElement.addEventListener('pointerdown',e=>dn=[e.clientX,e.clientY]);
+R.domElement.addEventListener('pointerup',e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const r=R.domElement.getBoundingClientRect();m.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(m,C);const h=ray.intersectObjects(meshes.filter(x=>x.visible))[0];if(h)pick(h.object.userData.p)});
+(function loop(){requestAnimationFrame(loop);ex+=(tg-ex)*.07;meshes.forEach(x=>{const p=x.userData.p;x.position.z=x.userData.z0+p.k*ex*70});CT.update();R.render(S,C)})()}
+function mk(p){const a=[];const M=()=>new THREE.MeshStandardMaterial({color:p.c,roughness:.55,metalness:.1,transparent:true,opacity:1});
+if(p.f){const m=new THREE.Mesh(geo[p.f],M());if(p.zt){m.rotation.x=Math.PI;m.position.z=p.zt}if(p.pos)m.position.set(...p.pos);return[m]}
+if(p.b){const[w,d,h,x,y,z]=p.b;const m=new THREE.Mesh(new THREE.BoxGeometry(w,d,h),M());m.position.set(x,y,z);return[m]}
+if(p.y){const[r,l,x,y,z]=p.y;const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,32),M());m.position.set(x,y,z);return[m]}
+if(p.L)return p.L.map((x,i)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,9,24),new THREE.MeshStandardMaterial({color:['#3ddc97','#ffc857','#ff4d6d'][i],emissive:['#3ddc97','#ffc857','#ff4d6d'][i],emissiveIntensity:.5,transparent:true}));m.rotation.x=Math.PI/2;m.position.set(x,11,29);return m});return[]}
+function build(d){meshes.forEach(x=>S.remove(x));meshes=[];$('#pl').innerHTML='';
+P.filter(p=>p.d===d).forEach(p=>{mk(p).forEach(m=>{m.userData={p,z0:m.position.z};S.add(m);meshes.push(m)});
+if(p.h)return;const e=document.createElement('div');e.className='pi';e.id='pi'+p.id;e.innerHTML=`<input type="checkbox" checked><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}`;
+e.querySelector('input').onclick=ev=>{ev.stopPropagation();meshes.filter(x=>x.userData.p===p||(p.g&&x.userData.p.id===p.g)).forEach(x=>x.visible=ev.target.checked)};e.onclick=()=>pick(p);$('#pl').appendChild(e)});
+const v=DV[d];CT.target.set(...v.c);C.position.set(...v.cam);CT.update();tg=ex=0;$('#sl').value=0;$('#bx').textContent='Разобрать';applyT();pick(null)}
+function applyT(){meshes.forEach(x=>{const body=['tb','rb','tl','rl'].includes(x.userData.p.id);x.material.opacity=trans&&body?.28:1;x.material.depthWrite=!(trans&&body)})}
+function pick(p){sel=p;$$('.pi').forEach(e=>e.classList.remove('on'));meshes.forEach(x=>{if(x.material.emissive&&!x.userData.p.L)x.material.emissive.set(x.userData.p===p||(p&&p.g===x.userData.p.id)?0x2a5a66:0x000000)});
+if(!p){$('#info').innerHTML='<h3>Выберите деталь</h3><p>Нажмите на деталь в 3D или в списке, чтобы узнать, что это.</p>';return}
+const e=$('#pi'+p.id);if(e)e.classList.add('on');$('#info').innerHTML=`<h3><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}</h3><p>${p.t}</p><p class="k">${p.s}</p>`}
+(async()=>{try{if(typeof THREE==='undefined'||typeof DecompressionStream==='undefined')throw Error('браузер не поддерживает 3D');
+for(const k in MODELS)geo[k]=await parse(MODELS[k]);init();build('tx');$('#ld').style.opacity=0;setTimeout(()=>$('#ld').remove(),700)}catch(e){$('#ld').textContent='3D недоступно: '+e.message}})();
+$$('#dtabs .tab').forEach(b=>b.onclick=()=>{$$('#dtabs .tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');cur=b.dataset.d;build(cur)});
+$('#bx').onclick=()=>{tg=tg<.5?1:0;$('#sl').value=tg;$('#bx').textContent=tg?'Собрать':'Разобрать'};
+$('#sl').oninput=e=>{tg=+e.target.value;$('#bx').textContent=tg>.5?'Собрать':'Разобрать'};
+$('#bt').onclick=()=>{trans=!trans;applyT()};$('#br').onclick=()=>CT.autoRotate=!CT.autoRotate;
+</script></body></html>
