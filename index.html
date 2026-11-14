@@ -167,20 +167,21 @@ $$('[data-n]').forEach(el=>{const n=+el.dataset.n;let i=0;const t=setInterval(()
 $$('.gal img').forEach(i=>i.parentElement.onclick=()=>{$('#lb img').src=i.src;$('#lb').classList.add('on')});$('#lb').onclick=()=>$('#lb').classList.remove('on');
 /* данные деталей */
 const P=[
-{id:'tb',d:'tx',n:'Корпус передатчика',c:'#9aa6c2',f:'transmitter_body',k:0,t:'Основа устройства. Две стенки с окнами: спереди отверстие Ø9 мм под лазер, сзади два окна USB-C со значками питания и отладки. Выемки под палец на боковых стенках.',s:'81 × 76,5 × 30 мм · стенка 2,5 мм'},
+{id:'tb',d:'tx',n:'Корпус передатчика',c:'#9aa6c2',f:'transmitter_body',k:0,t:'Основа устройства. Спереди отверстие Ø9 мм под лазер, сзади два окна USB-C со значками питания и отладки. Выемки под палец на боковых стенках.',s:'81 × 76,5 × 30 мм · стенка 2,5 мм'},
 {id:'tl',d:'tx',n:'Крышка передатчика',c:'#6fd0a8',f:'transmitter_lid',zt:33,k:1,t:'Снимается без инструментов. Несёт лоток лазера над платой, канал Ø6,2 мм со стопорным винтом M3, держатели светодиодов с перегородками и выгравированные подписи.',s:'толщина 3 мм · выступ-фиксатор 3 мм'},
-{id:'te',d:'tx',n:'ESP32-S3',c:'#3b82f6',b:[28,64,8,18.5,40,9.5],k:.25,t:'Управляет лазером и светодиодами, связывается с телефоном. Лежит на подиуме на двустороннем скотче, USB-C выходит в заднюю стенку.',s:'64 × 28 × 8 мм · два USB-C'},
-{id:'tp',d:'tx',n:'Лазерный модуль KY-008',c:'#ff4d6d',b:[15,18.5,1.6,18.5,26.3,17.8],k:.6,t:'Излучатель. Плата лежит в лотке на крышке над ESP32, цилиндр с линзой входит в канал и фиксируется винтом M3.',s:'плата 18,5 × 15 мм · цилиндр Ø6 мм',g:'tc'},
-{id:'tc',d:'tx',n:'Цилиндр лазера',c:'#ffb3c0',y:[3,11,18.5,11.5,21.6],k:.6,t:'Металлический цилиндр с линзой. Ось луча задаёт длинный канал в крышке, поэтому луч выходит строго по оси.',s:'Ø6 мм · канал Ø6,2 × 16 мм',h:1},
-{id:'t1',d:'tx',n:'Светодиоды 5 мм',c:'#3ddc97',L:[-31,-13,5],k:1.05,t:'Зелёный — питание, жёлтый — телефон подключён, красный — идёт передача. Вставляются снизу в держатели с перегородками, чтобы не засвечивать друг друга.',s:'3 шт · Ø5 мм · отверстия 5,2 мм'},
+{id:'te',d:'tx',n:'ESP32-S3 DevKitC-1',c:'#3b82f6',fn:'esp',at:[18.5,40,5.5],k:.25,u:'https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html',t:'Модуль ESP32-S3-WROOM-1 с печатной антенной, два порта USB-C (UART и родной USB), кнопки BOOT и EN, гребёнки выводов. Управляет лазером и светодиодами. Лежит на скотче, порты смотрят в заднюю стенку.',s:'64 × 28 мм · два USB-C · 2 × 22 вывода'},
+{id:'tp',d:'tx',n:'Лазерный модуль KY-008',c:'#c9a24b',fn:'ky',at:[18.5,26.25,17],k:.6,u:'https://easyelecmodule.com/product/ky-008-laser-transmitter-module',t:'Чёрная плата с латунной головкой Ø6 мм, красный лазер 650 нм, 3-контактная гребёнка (S, +, −). Лежит в лотке на крышке над ESP32, голова входит в канал и фиксируется винтом M3.',s:'плата 18,5 × 15 мм · голова Ø6 мм · 650 нм, 5 В'},
+{id:'t1',d:'tx',n:'Светодиоды 5 мм',c:'#3ddc97',fn:'leds',L:[-31,-13,5],at:[0,0,0],k:1.05,t:'Зелёный — питание, жёлтый — телефон подключён, красный — идёт передача. Вставляются снизу в держатели с перегородками, чтобы не засвечивать друг друга.',s:'3 шт · Ø5 мм · отверстия 5,2 мм'},
 {id:'rb',d:'rx',n:'Корпус приёмника',c:'#9aa6c2',f:'receiver_body',k:0,t:'Светонепроницаемый корпус высотой 36 мм. Спереди только отверстие Ø13,8 мм под трубку, сзади два окна USB-C со значками. Площадки под скотч для платы.',s:'71 × 82,5 × 36 мм'},
 {id:'rl',d:'rx',n:'Крышка приёмника',c:'#6fb0ff',f:'receiver_lid',zt:40,k:1,t:'Несёт экран и оптическую трубку: она висит на крышке над платами. Окно 48 × 35 мм, гнездо модуля 58,4 × 37,9 мм.',s:'толщина 4 мм · трубка Ø13 × 47,5 мм'},
 {id:'rs',d:'rx',n:'Планка экрана',c:'#ffc857',f:'receiver_screen_bar',pos:[0,60,32],k:.45,t:'Прижимает модуль экрана к крышке изнутри. Крепится двумя винтами M2.',s:'56 × 7 × 4 мм'},
-{id:'rm',d:'rx',n:'Экран ST7789',c:'#111827',b:[37.9,58.4,3,0,49.5,37.5],k:.7,t:'Цветной IPS-экран 320 × 240 с чёрным бортом 48 × 35 мм. Садится в гнездо крышки, провода идут на плату.',s:'58 × 37,5 мм · 8 пинов'},
-{id:'rp',d:'rx',n:'Макетная плата 50 × 70',c:'#1f9d6b',b:[50,70,1.6,0,43,6.3],k:.12,t:'Общая паячная плата: ESP32-S3, усилитель на MCP6002 (DIP8), резисторы. Стоит на четырёх площадках на скотче.',s:'50 × 70 мм'},
-{id:'re',d:'rx',n:'ESP32-S3',c:'#3b82f6',b:[28,64,8,-10,46,13.6],k:.3,t:'Обрабатывает сигнал, рисует на экране. USB-C выходит в заднюю стенку.',s:'64 × 28 × 8 мм'},
-{id:'rd',d:'rx',n:'Фотодиод BPW34',c:'#f59e0b',b:[5.4,3.2,4.3,24,46.5,29],k:1,t:'Стоит на дне трубки тёмным квадратом 2,7 × 2,7 мм наружу, строго по центру. Над платой, провода идут вниз.',s:'5,4 × 4,3 × 3,2 мм'}];
+{id:'rm',d:'rx',n:'Экран ST7789 2,0″',c:'#37e6ff',fn:'tft',at:[0,49.5,36],k:.7,t:'Цветной IPS-экран 320 × 240 на контроллере ST7789, плата с 8-контактной гребёнкой (GND, VCC, SCL, SDA, RES, DC, CS, BLK). Садится в гнездо крышки стеклом к окну.',s:'модуль 58 × 37,5 мм · окно 48 × 35 мм'},
+{id:'rp',d:'rx',n:'Макетная плата 50 × 70',c:'#1f9d6b',fn:'perf',at:[0,43,5.5],k:.12,t:'Общая паячная плата с шагом 2,54 мм: на ней ESP32-S3 и усилитель. Стоит на четырёх площадках на двустороннем скотче.',s:'50 × 70 мм · шаг 2,54 мм'},
+{id:'rc',d:'rx',n:'Усилитель MCP6002',c:'#e8a317',fn:'amp',at:[0,43,7.1],k:.2,t:'Двойной операционный усилитель MCP6002 в корпусе DIP-8 на панельке, резисторы и конденсатор. Усиливают слабый ток фотодиода перед входом ESP32.',s:'DIP-8 · 9,3 × 6,35 мм'},
+{id:'re',d:'rx',n:'ESP32-S3 DevKitC-1',c:'#3b82f6',fn:'esp',at:[-10,46,9.6],k:.3,u:'https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/user_guide_v1.1.html',t:'Принимает сигнал с усилителя и рисует на экране. Воткнута в макетную плату, оба USB-C смотрят в заднюю стенку.',s:'64 × 28 мм · два USB-C'},
+{id:'rd',d:'rx',n:'Фотодиод BPW34',c:'#f59e0b',fn:'bpw',at:[24,46.5,29],k:1,t:'Прозрачный корпус с тёмным квадратом 2,7 × 2,7 мм посередине. Стоит на дне трубки, квадратом наружу. Два вывода идут проводами к усилителю.',s:'5,4 × 4,3 × 3,2 мм'}];
 const DV={tx:{c:[0,38,16],cam:[130,-150,110]},rx:{c:[0,41,18],cam:[150,-170,125]}};
+
 /* карточки */
 function cards(f){$('#pg').innerHTML=P.filter(p=>!p.h&&(f==='all'||p.d===f)).map(p=>`<div class="card rv"><h3><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}</h3><p>${p.t}</p><ul><li>${p.s}</li><li>${p.d==='tx'?'Передатчик':'Приёмник'}</li></ul></div>`).join('');obs()}
 cards('all');$$('#ptabs .tab').forEach(b=>b.onclick=()=>{$$('#ptabs .tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');cards(b.dataset.f)});
@@ -199,22 +200,72 @@ S.add(new THREE.HemisphereLight(0xffffff,0x445566,.95));const l=new THREE.Direct
 CT=new THREE.OrbitControls(C,R.domElement);CT.enableDamping=true;CT.autoRotate=true;CT.autoRotateSpeed=1.2;
 const rs=()=>{const w=cv.clientWidth,h=cv.clientHeight;R.setSize(w,h,false);C.aspect=w/h;C.updateProjectionMatrix()};addEventListener('resize',rs);rs();
 const ray=new THREE.Raycaster(),m=new THREE.Vector2();let dn;R.domElement.addEventListener('pointerdown',e=>dn=[e.clientX,e.clientY]);
-R.domElement.addEventListener('pointerup',e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const r=R.domElement.getBoundingClientRect();m.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(m,C);const h=ray.intersectObjects(meshes.filter(x=>x.visible))[0];if(h)pick(h.object.userData.p)});
+R.domElement.addEventListener('pointerup',e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>5)return;const r=R.domElement.getBoundingClientRect();m.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(m,C);const h=ray.intersectObjects(meshes.filter(x=>x.visible),true)[0];if(h){let o=h.object;while(o&&!o.userData.p)o=o.parent;if(o)pick(o.userData.p)}});
 (function loop(){requestAnimationFrame(loop);ex+=(tg-ex)*.07;meshes.forEach(x=>{const p=x.userData.p;x.position.z=x.userData.z0+p.k*ex*70});CT.update();R.render(S,C)})()}
-function mk(p){const a=[];const M=()=>new THREE.MeshStandardMaterial({color:p.c,roughness:.55,metalness:.1,transparent:true,opacity:1});
-if(p.f){const m=new THREE.Mesh(geo[p.f],M());if(p.zt){m.rotation.x=Math.PI;m.position.z=p.zt}if(p.pos)m.position.set(...p.pos);return[m]}
-if(p.b){const[w,d,h,x,y,z]=p.b;const m=new THREE.Mesh(new THREE.BoxGeometry(w,d,h),M());m.position.set(x,y,z);return[m]}
-if(p.y){const[r,l,x,y,z]=p.y;const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,32),M());m.position.set(x,y,z);return[m]}
-if(p.L)return p.L.map((x,i)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,9,24),new THREE.MeshStandardMaterial({color:['#3ddc97','#ffc857','#ff4d6d'][i],emissive:['#3ddc97','#ffc857','#ff4d6d'][i],emissiveIntensity:.5,transparent:true}));m.rotation.x=Math.PI/2;m.position.set(x,11,29);return m});return[]}
+/* реалистичные модели */
+const GOLD=0xd4af37,SIL=0xc9ccd2,BRS=0xc9a24b;
+const mt=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.6,metalness:.05},o||{}));
+const mm=(c,s)=>new THREE.MeshPhongMaterial({color:c,specular:0xdddddd,shininess:s||90});
+function bx(g,w,d,h,c,x,y,z,m){const o=new THREE.Mesh(new THREE.BoxGeometry(w,d,h),m||mt(c));o.position.set(x,y,z);g.add(o);return o}
+function cy(g,r,l,c,x,y,z,ax,m){const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,24),m||mt(c));if(ax==='z')o.rotation.x=Math.PI/2;if(ax==='x')o.rotation.z=Math.PI/2;o.position.set(x,y,z);g.add(o);return o}
+const glass=c=>mt(c,{transparent:true,opacity:.82,roughness:.2,emissive:c,emissiveIntensity:.5});
+const FN={};
+FN.esp=()=>{const g=new THREE.Group(),G=mm(GOLD,120),S=mm(SIL,110);
+bx(g,28,64,1.6,0,0,0,.8,mt(0x10141c,{roughness:.45}));
+for(const s of[-1,1]){bx(g,2.54,56,2.5,0x15171b,s*12.7,-3,2.85);for(let i=0;i<22;i++)bx(g,.6,.6,9.5,0,s*12.7,-3+(i-10.5)*2.54,1.75,G)}
+bx(g,18,25.5,.8,0x0d1117,0,-21.25,2);bx(g,17.6,19.2,3,0,0,-18.1,3.9,mm(SIL,60));
+for(let i=0;i<5;i++){bx(g,12.5,.5,.06,0,i%2?-.5:.5,-33.2+i*1.2,2.43,mt(0xb8923a,{metalness:.6}));if(i<4)bx(g,.5,1.2,.06,0,i%2?-6.25:6.25,-32.6+i*1.2,2.43,mt(0xb8923a))}
+for(const s of[-1,1]){bx(g,8.94,8.4,3.26,0,s*7.5,29.3,3.23,S);bx(g,7.8,.3,1.9,0x050608,s*7.5,33.62,3.23);bx(g,6,.25,.5,0x30343a,s*7.5,33.7,3.23);
+bx(g,3.8,3,1.2,0x1b1b1b,s*11.5,17.5,2.2);cy(g,1,1,0,s*11.5,17.5,3.2,'z',S)}
+bx(g,5,5,.8,0x0a0a0a,0,10,2);bx(g,6.4,3.4,1.6,0x16181c,-6,20.5,2.4);bx(g,4,4,1.4,0xe9e9e9,7,-4,2.3);
+for(let i=0;i<26;i++){const x=((i*37)%19)-9.5,y=((i*53)%30)-1;bx(g,1.6,.8,.5,0,x*.9,y,1.85,mt(i%2?0xb69a6a:0x22252b))}
+return g};
+FN.ky=()=>{const g=new THREE.Group(),B=mm(BRS,70),S=mm(SIL,120);
+bx(g,15,18.5,1.6,0x14161a,0,0,.8);cy(g,3,17,0,0,-11.75,4.6,'y',B);cy(g,3.05,1.4,0,0,-19.55,4.6,'y',S);
+cy(g,2.2,.2,0,0,-20.3,4.6,'y',mt(0xff3b3b,{emissive:0xff2020,emissiveIntensity:.8,transparent:true,opacity:.9}));
+bx(g,7.7,2.5,2.5,0x111111,0,7.2,2.85);for(let i=-1;i<2;i++)bx(g,.6,.6,8,0,i*2.54,7.2,5.5,mm(GOLD,120));
+bx(g,2,1,.5,0x1a1a1a,4.5,-1,1.85);bx(g,2,1,.5,0xb69a6a,-4.5,2,1.85);return g};
+FN.leds=p=>{const g=new THREE.Group();p.L.forEach((x,i)=>{const col=[0x2bd47a,0xffc400,0xff2d4d][i],l=new THREE.Group(),m=glass(col);l.position.set(x,11,24.6);
+cy(l,2.9,1,0,0,0,.5,'z',m);cy(l,2.5,5.1,0,0,0,3.55,'z',m);
+const d=new THREE.Mesh(new THREE.SphereGeometry(2.5,24,12,0,Math.PI*2,0,Math.PI/2),m);d.rotation.x=Math.PI/2;d.position.z=6.1;l.add(d);
+bx(l,.5,.5,8,0,-1.27,0,-4,mm(SIL,110));bx(l,.5,.5,7,0,1.27,0,-3.5,mm(SIL,110));g.add(l)});return g};
+FN.bpw=()=>{const g=new THREE.Group();
+bx(g,5.4,3.2,4.3,0,0,0,0,mt(0xbcd6e6,{transparent:true,opacity:.6,roughness:.15}));bx(g,2.65,.05,2.65,0x07080b,0,-1.63,0);
+for(const s of[-1,1]){bx(g,.5,9,.25,0,s*1.27,6,0,mm(SIL,120));
+const cv=new THREE.CatmullRomCurve3([new THREE.Vector3(s*1.27,10.2,0),new THREE.Vector3(s*2.6,13,-5),new THREE.Vector3(s*3.5,17,-17),new THREE.Vector3(s*3.5,19,-21.5)]);
+const w=new THREE.Mesh(new THREE.TubeGeometry(cv,24,.4,8),mt(s<0?0x222222:0xc0392b));g.add(w)}return g};
+FN.perf=()=>{const g=new THREE.Group(),c=document.createElement('canvas');c.width=500;c.height=700;const x=c.getContext('2d');
+x.fillStyle='#1b6a45';x.fillRect(0,0,500,700);for(let i=0;i<19;i++)for(let j=0;j<27;j++){const px=25+i*25.4,py=25+j*25.4;x.fillStyle='#c9a24b';x.beginPath();x.arc(px,py,10,0,7);x.fill();x.fillStyle='#0a0f0c';x.beginPath();x.arc(px,py,4.5,0,7);x.fill()}
+const t=new THREE.CanvasTexture(c);const f=mt(0x1b6a45),top=mt(0xffffff,{map:t,roughness:.5});
+const o=new THREE.Mesh(new THREE.BoxGeometry(50,70,1.6),[f,f,f,f,top,f]);o.position.z=.8;g.add(o);return g};
+FN.amp=()=>{const g=new THREE.Group(),S=mm(SIL,110),R=(x,y,l)=>{cy(g,1.1,l,0xd8b46a,x,y,2.2,'x');for(let i=0;i<3;i++)cy(g,1.12,.5,[0x8b4513,0x111111,0xc0392b][i],x-1.2+i*1.2,y,2.2,'x');bx(g,l+4,.4,.4,0,x,y,1.4,S)};
+bx(g,7.8,10.6,3.2,0x111111,14,-3.5,1.6);bx(g,6.35,9.3,3.3,0x15171c,14,-3.5,4.85);
+for(let j=0;j<4;j++)for(const s of[-1,1])bx(g,.5,.5,2,0,14+s*3.6,-3.5-3.8+j*2.54,4.3,S);cy(g,.5,.1,0xdddddd,12,-7,6.55,'z');
+[[8,8],[8,14],[20,8],[20,14],[8,-12]].forEach(a=>R(a[0],a[1],6.3));
+cy(g,2.2,.8,0xe8a317,20,-14,1.6,'z');bx(g,.4,.4,2,0,19,-14,.8,S);bx(g,.4,.4,2,0,21,-14,.8,S);return g};
+FN.tft=()=>{const g=new THREE.Group();
+bx(g,37.5,58,1,0x1b2a49,0,0,.5,mt(0x1b2a49,{roughness:.4}));bx(g,35.2,51,2,0x0b0d10,0,2,2,mt(0x0b0d10,{roughness:.15,metalness:.2}));
+const c=document.createElement('canvas');c.width=306;c.height=408;const x=c.getContext('2d'),gr=x.createLinearGradient(0,0,0,408);gr.addColorStop(0,'#06304f');gr.addColorStop(1,'#041018');x.fillStyle=gr;x.fillRect(0,0,306,408);
+x.fillStyle='#37e6ff';x.font='bold 34px sans-serif';x.fillText('LASER·LINK',20,56);x.fillStyle='#8fb7c9';x.font='22px sans-serif';x.fillText('RX · 650 нм',20,92);
+for(let i=0;i<5;i++){x.fillStyle=i<4?'#3ddc97':'#334';x.fillRect(24+i*34,230-i*24,24,40+i*24)}
+x.strokeStyle='#ff4d6d';x.lineWidth=3;x.beginPath();for(let i=0;i<260;i++){const y=330+Math.sin(i/9)*18*(i%40<20?1:.3);i?x.lineTo(20+i,y):x.moveTo(20,y)}x.stroke();
+x.fillStyle='#3ddc97';x.font='bold 26px sans-serif';x.fillText('СИГНАЛ OK',20,395);
+const s=new THREE.Mesh(new THREE.PlaneGeometry(30.6,40.8),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)}));s.position.set(0,2.5,3.02);g.add(s);
+bx(g,20.3,2.5,2.5,0x111111,0,-26.5,-1.25);for(let i=0;i<8;i++)bx(g,.6,.6,6,0,-8.9+i*2.54,-26.5,-2,mm(GOLD,120));return g};
+
+function mkp(p){if(p.f){const m=new THREE.Mesh(geo[p.f],new THREE.MeshStandardMaterial({color:p.c,roughness:.55,metalness:.1,transparent:true,opacity:1}));if(p.zt){m.rotation.x=Math.PI;m.position.z=p.zt}if(p.pos)m.position.set(...p.pos);m.userData.stl=1;return m}
+const g=FN[p.fn](p);g.position.set(...p.at);g.traverse(m=>{if(m.material&&m.material.emissive&&m.material.emissiveIntensity>0&&m.material.emissive.getHex())m.userData.keepEm=1});return g}
 function build(d){meshes.forEach(x=>S.remove(x));meshes=[];$('#pl').innerHTML='';
-P.filter(p=>p.d===d).forEach(p=>{mk(p).forEach(m=>{m.userData={p,z0:m.position.z};S.add(m);meshes.push(m)});
-if(p.h)return;const e=document.createElement('div');e.className='pi';e.id='pi'+p.id;e.innerHTML=`<input type="checkbox" checked><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}`;
-e.querySelector('input').onclick=ev=>{ev.stopPropagation();meshes.filter(x=>x.userData.p===p||(p.g&&x.userData.p.id===p.g)).forEach(x=>x.visible=ev.target.checked)};e.onclick=()=>pick(p);$('#pl').appendChild(e)});
+P.filter(p=>p.d===d).forEach(p=>{const o=mkp(p);o.userData.p=p;o.userData.z0=o.position.z;S.add(o);meshes.push(o);
+const e=document.createElement('div');e.className='pi';e.id='pi'+p.id;e.innerHTML=`<input type="checkbox" checked><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}`;
+e.querySelector('input').onclick=ev=>{ev.stopPropagation();o.visible=ev.target.checked};e.onclick=()=>pick(p);$('#pl').appendChild(e)});
 const v=DV[d];CT.target.set(...v.c);C.position.set(...v.cam);CT.update();tg=ex=0;$('#sl').value=0;$('#bx').textContent='Разобрать';applyT();pick(null)}
-function applyT(){meshes.forEach(x=>{const body=['tb','rb','tl','rl'].includes(x.userData.p.id);x.material.opacity=trans&&body?.28:1;x.material.depthWrite=!(trans&&body)})}
-function pick(p){sel=p;$$('.pi').forEach(e=>e.classList.remove('on'));meshes.forEach(x=>{if(x.material.emissive&&!x.userData.p.L)x.material.emissive.set(x.userData.p===p||(p&&p.g===x.userData.p.id)?0x2a5a66:0x000000)});
+function applyT(){meshes.forEach(x=>{if(!x.userData.stl)return;const body=['tb','rb','tl','rl'].includes(x.userData.p.id);x.material.opacity=trans&&body?.28:1;x.material.depthWrite=!(trans&&body)})}
+function setEm(o,on){o.traverse(m=>{if(m.material&&m.material.emissive&&!m.userData.keepEm)m.material.emissive.setHex(on?0x2a5a66:0)})}
+function pick(p){sel=p;$$('.pi').forEach(e=>e.classList.remove('on'));meshes.forEach(x=>setEm(x,!!p&&x.userData.p===p));
 if(!p){$('#info').innerHTML='<h3>Выберите деталь</h3><p>Нажмите на деталь в 3D или в списке, чтобы узнать, что это.</p>';return}
-const e=$('#pi'+p.id);if(e)e.classList.add('on');$('#info').innerHTML=`<h3><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}</h3><p>${p.t}</p><p class="k">${p.s}</p>`}
+const e=$('#pi'+p.id);if(e)e.classList.add('on');$('#info').innerHTML=`<h3><span class="dot" style="color:${p.c};background:${p.c}"></span>${p.n}</h3><p>${p.t}</p><p class="k">${p.s}</p>`+(p.u?`<p><a href="${p.u}" target="_blank" rel="noopener">Документация и фото →</a></p>`:'')}
+
 (async()=>{try{if(typeof DecompressionStream==='undefined')throw Error('браузер слишком старый, обновите его');
 for(const k in MODELS)RAW[k]=await raw(MODELS[k]);if(typeof THREE==='undefined')throw Error('не загрузилась библиотека three.js, проверьте интернет');
 for(const k in RAW)geo[k]=toGeo(RAW[k]);init();build('tx');$('#ld').style.opacity=0;setTimeout(()=>$('#ld').remove(),700)}catch(e){$('#ld').textContent='3D недоступно: '+e.message}})();
